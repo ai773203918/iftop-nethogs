@@ -8,7 +8,7 @@ on:  # 定义触发工作流的事件
       tag:  # 输入的标签
         description: '构建的版本号'  # 手动触发时输入的标签描述
         required: true  # 必须输入
-        default: 'test'  # 默认标签为'test'
+        default: 'latest'  # 默认标签为'test'
 
 permissions:  # 工作流权限
   contents: read  # 工作流需要读取仓库内容的权限
@@ -77,7 +77,7 @@ jobs:  # 工作流作业
         with:  # 参数
           context: .  # 构建上下文
           file: ./Dockerfile_nethogs  # 指定的Dockerfile
-          platforms: linux/amd64,linux/386,linux/arm64/v8,linux/arm/v7  # 构建的平台(正式构建)
+          platforms: linux/amd64,linux/386,linux/arm64/v8,linux/arm/v7,linux/arm/v6,linux/ppc64le,linux/riscv64,linux/s390x  # 构建的平台(正式构建)
           push: true  # 推送到仓库
           # load: true  # 加载到本地(多构建平台不支持;若其它也需调用镜像则必须加载,如打包导出)
           # 注意 | 后注释会有问题故放在这
