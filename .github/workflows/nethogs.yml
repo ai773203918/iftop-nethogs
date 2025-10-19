@@ -67,7 +67,7 @@ jobs:  # 工作流作业
         # 设置引用的Dockerfile路径
         # 设置构建的镜像标签:版本号+latest(注意tag全小写)
         run: |
-          echo "DOCKERFILE_PATH=Dockerfile" >> $GITHUB_ENV
+          echo "DOCKERFILE_PATH=Dockerfile_nethogs" >> $GITHUB_ENV
           echo "TAG=918178/nethogs:${{ env.TAG_NAME }}" >> $GITHUB_ENV
           echo "TAG_LATEST=918178/nethogs:latest" >> $GITHUB_ENV
 
@@ -76,7 +76,7 @@ jobs:  # 工作流作业
         uses: docker/build-push-action@v5  # 引用流程
         with:  # 参数
           context: .  # 构建上下文
-          file: ./Dockerfile  # 指定的Dockerfile
+          file: ./Dockerfile_nethogs  # 指定的Dockerfile
           platforms: linux/amd64,linux/386,linux/arm64/v8,linux/arm/v7  # 构建的平台(正式构建)
           push: true  # 推送到仓库
           # load: true  # 加载到本地(多构建平台不支持;若其它也需调用镜像则必须加载,如打包导出)
