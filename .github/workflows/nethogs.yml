@@ -61,31 +61,38 @@ jobs:  # 工作流作业
           username: ${{ secrets.DOCKERHUB_USERNAME }}  # Docker Hub 用户名(需在secrets中配置)
           password: ${{ secrets.DOCKERHUB_PASSWORD }}  # Docker Hub Token(需在secrets中配置)
 
-      # 准备镜像标签
-      - name: 设置 Image Tags  # 步骤名称
-        # 注意 | 后注释会有问题故放在这
-        # 设置引用的Dockerfile路径
-        # 设置构建的镜像标签:版本号+latest(注意tag全小写)
-        run: |
-          echo "DOCKERFILE_PATH=Dockerfile_nethogs" >> $GITHUB_ENV
-          echo "TAG=918178/nethogs:${{ env.TAG_NAME }}" >> $GITHUB_ENV
-          echo "TAG_LATEST=918178/nethogs:latest" >> $GITHUB_ENV
-
-      # 构建并推送镜像
-      - name: 编译并推送 nethogs镜像  # 步骤名称
-        uses: docker/build-push-action@v5  # 引用流程
-        with:  # 参数
-          context: .  # 构建上下文
-          file: ./Dockerfile_nethogs  # 指定的Dockerfile
-          platforms: linux/amd64,linux/386,linux/arm64/v8,linux/arm/v7,linux/arm/v6,linux/ppc64le,linux/riscv64,linux/s390x  # 构建的平台(正式构建)
-          push: true  # 推送到仓库
-          # load: true  # 加载到本地(多构建平台不支持;若其它也需调用镜像则必须加载,如打包导出)
-          # 注意 | 后注释会有问题故放在这
-          # 传递构建参数(覆盖 ARG nethogs_VERSION=3.5.0 配置参数)
-          # build-args: |
-          #   nethogs_VERSION=${{ env.TAG_NAME }}
-          # 注意 | 后注释会有问题故放在这
-          # 推送的镜像标签(版本标签+latest)
+      # 构建并推送 iftop 镜像
+      - name: 编译并推送 iftop 镜像
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile_iftop
+          platforms: linux/amd64,linux/386,linux/arm64/v8,linux/arm/v7,linux/arm/v6,linux/ppc64le,linux/riscv64,linux/s390x
+          push: true
           tags: |
-            ${{ env.TAG }}
-            ${{ env.TAG_LATEST }}
+            918178/iftop:${{ env.TAG_NAME }}
+            918178/iftop:latest
+
+      # 构建并推送 nethogs 镜像
+      - name: 编译并推送 nethogs 镜像
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile_nethogs
+          platforms: linux/amd64,linux/386,linux/arm64/v8,linux/arm/v7,linux/arm/v6,linux/ppc64le,linux/riscv64,linux/s390x
+          push: true
+          tags: |
+            918178/nethogs:${{ env.TAG_NAME }}
+            918178/nethogs:latest
+
+      # 构建并推送 iftop-nethogs 镜像
+      - name: 编译并推送 iftop-nethogs 镜像
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile_iftop-nethogs
+          platforms: linux/amd64,linux/386,linux/arm64/v8,linux/arm/v7,linux/arm/v6,linux/ppc64le,linux/riscv64,linux/s390x
+          push: true
+          tags: |
+            918178/iftop-nethogs:${{ env.TAG_NAME }}
+            918178/iftop-nethogs:latest
